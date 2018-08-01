@@ -1,16 +1,13 @@
 var app = require('express')();
 var http = require('http').Server(app);
+// var https = require('https');
 var io = require('socket.io')(http);
-var https = require('https');
+
 var fs = require("fs");
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var options = {
-    key: fs.readFileSync('/var/SSL_Data/private.key'),
-    cert: fs.readFileSync('/var/SSL_Data/certificate.crt'),
-    ca: fs.readFileSync ('/var/SSL_Data/ca_bundle.crt')
-};
+
 
 
 
@@ -95,9 +92,7 @@ app.post('/tripStatusChange', function (req, res) {
     res.json({ 'success': true });
 });
 
-https.createServer(options,listen(443 ,function () {
-    console.log('listening on *:443');
-});
+
 
 /****************************** Trip Tracking Room Logic *********************************/
 
@@ -145,6 +140,4 @@ app.get('/', function (req, res) {
 http.listen(3001, function () {
     console.log('listening on *:3001');
 });
-https.createServer(options,listen(443 ,function () {
-    console.log('listening on *:443');
-});
+
