@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello world</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        function getParameterByName(name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        var driverCode = getParameterByName('driverCode');
+        
+        //Initialize socket
+        var socket = io('http://localhost:3001');
+        
+        //Set driver code to listen to.
+        socket.emit('setDriverToListen', {'driverCode': driverCode});
+
+        setTimeout(function() {
+            console.log('will leave driver room');
+            socket.emit('setDriverToListen', {'driverCode': driverCode});
+            
+        }, 10000);
+
+        socket.on('driverLocation', function (data) {
+            console.log('ack event response at ' + Date() + ' -- ', data);
+        });
+    </script>
+
+</head>
+
+<body>Running node...</body>
+
+</html>
